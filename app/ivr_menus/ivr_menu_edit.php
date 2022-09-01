@@ -606,6 +606,14 @@
 	$recordings = $database->select($sql, $parameters, 'all');
 	unset($sql, $parameters);
 
+//get the tts
+	$sql = "select * from v_tts";
+	$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
+	$parameters['domain_uuid'] = $domain_uuid;
+	$database = new database;
+	$tts= $database->select($sql, $parameters, 'all');
+	unset($sql, $parameters);
+
 //get the phrases
 	$sql = "select * from v_phrases ";
 	$sql .= "where (domain_uuid = :domain_uuid or domain_uuid is null) ";
@@ -814,6 +822,21 @@
 			}
 			echo "</optgroup>\n";
 		}
+	//tts
+		if (is_array($tts)) {
+			echo "<optgroup label='TTS'>\n";
+			foreach ($tts as &$row) {
+				if ($ivr_menu_greet_long == "tts:".$row["tts_uuid"]) {
+					$tmp_selected = true;
+					echo "	<option value='tts:".escape($row["tts_uuid"])."' selected='selected'>".escape($row["tts_name"])."</option>\n";
+				}
+				else {
+					echo "	<option value='tts:".escape($row["tts_uuid"])."'>".escape($row["tts_name"])."</option>\n";
+				}
+			}
+			echo "</optgroup>\n";
+		}
+
 	//phrases
 		if (is_array($phrases)) {
 			echo "<optgroup label='Phrases'>\n";
@@ -955,6 +978,21 @@
 			}
 			echo "</optgroup>\n";
 		}
+	//tts
+		if (is_array($tts)) {
+			echo "<optgroup label='TTS'>\n";
+			foreach ($tts as &$row) {
+				if ($ivr_menu_greet_short == "tts:".$row["tts_uuid"]) {
+					$tmp_selected = true;
+					echo "	<option value='tts:".escape($row["tts_uuid"])."' selected='selected'>".escape($row["tts_name"])."</option>\n";
+				}
+				else {
+					echo "	<option value='tts:".escape($row["tts_uuid"])."'>".escape($row["tts_name"])."</option>\n";
+				}
+			}
+			echo "</optgroup>\n";
+		}
+
 	//phrases
 		if (is_array($phrases)) {
 			echo "<optgroup label='Phrases'>\n";
@@ -1239,6 +1277,7 @@
 		//misc optgroup
 			if (if_group("superadmin")) {
 				echo "<optgroup label='Misc'>\n";
+				echo "	<option value='tts:'>tts:</option>\n";
 				echo "	<option value='phrase:'>phrase:</option>\n";
 				echo "	<option value='say:'>say:</option>\n";
 				echo "	<option value='tone_stream:'>tone_stream:</option>\n";
@@ -1265,6 +1304,22 @@
 				}
 				echo "</optgroup>\n";
 			}
+
+		//tts
+			if (is_array($tts)) {
+				echo "<optgroup label='TTS'>\n";
+				foreach ($tts as &$row) {
+					if ($ivr_menu_invalid_sound == "tts:".$row["tts_uuid"]) {
+						$tmp_selected = true;
+						echo "	<option value='tts:".escape($row["tts_uuid"])."' selected='selected'>".escape($row["tts_name"])."</option>\n";
+					}
+					else {
+						echo "	<option value='tts:".escape($row["tts_uuid"])."'>".escape($row["tts_name"])."</option>\n";
+					}
+				}
+				echo "</optgroup>\n";
+			}
+
 		//phrases
 			if (is_array($phrases)) {
 				echo "<optgroup label='Phrases'>\n";
@@ -1328,6 +1383,7 @@
 		//misc optgroup
 			if (if_group("superadmin")) {
 				echo "<optgroup label='Misc'>\n";
+				echo "	<option value='tts:'>tts:</option>\n";
 				echo "	<option value='phrase:'>phrase:</option>\n";
 				echo "	<option value='say:'>say:</option>\n";
 				echo "	<option value='tone_stream:'>tone_stream:</option>\n";
@@ -1354,6 +1410,21 @@
 				}
 				echo "</optgroup>\n";
 			}
+		//tts
+			if (is_array($tts)) {
+				echo "<optgroup label='TTS'>\n";
+				foreach ($tts as &$row) {
+					if ($ivr_menu_exit_sound == "tts:".$row["tts_uuid"]) {
+						$tmp_selected = true;
+						echo "	<option value='tts:".escape($row["tts_uuid"])."' selected='selected'>".escape($row["tts_name"])."</option>\n";
+					}
+					else {
+						echo "	<option value='tts:".escape($row["tts_uuid"])."'>".escape($row["tts_name"])."</option>\n";
+					}
+				}
+				echo "</optgroup>\n";
+			}
+
 		//phrases
 			if (is_array($phrases)) {
 				echo "<optgroup label='Phrases'>\n";
